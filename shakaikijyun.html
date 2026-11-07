@@ -1,0 +1,51 @@
+<!-- ▼ ここから：社会福祉士 出題基準 科目別表示（ホームページ埋め込み用） -->
+<style> …（CSS。すべて #kijun-app 配下に限定）… </style>
+
+<div id="kijun-app">
+
+  <!-- ① 科目ボタン -->
+  <div class="kj-tabs">
+    <span class="kj-lab c">共通科目</span>
+    <button type="button" class="c" data-s="s01">1. 医学概論</button>
+    <button type="button" class="c" data-s="s02">2. 心理学と心理的支援</button>
+    … s03〜s12 …
+    <span class="kj-br"></span>
+    <span class="kj-lab s">専門科目</span>
+    <button type="button" class="s" data-s="s13">13. 高齢者福祉</button>
+    … s14〜s19 …
+  </div>
+
+  <!-- ② 検索・折りたたみ -->
+  <div class="kj-tools">
+    <input class="kj-q" type="search" placeholder="全科目からキーワード検索（例：介護保険）">
+    <button type="button" class="kj-fold">大項目をすべて開く／閉じる</button>
+    <span class="kj-hint">科目名ボタンを押すとその科目だけ表示されます</span>
+  </div>
+
+  <!-- ③ 科目本体（19個。id が data-s と対応） -->
+  <section class="subject g-common" id="s01" style="font-size:14px">
+    <div class="head">
+      <span class="no">科目 1</span><span class="grp">共通科目</span><h2>医学概論</h2>
+    </div>
+    <div class="cols" style="column-count:2">
+      <div class="major">                       <!-- 大項目 -->
+        <h3>1 ライフステージにおける心身の変化と健康課題</h3>
+        <div class="mid short">                 <!-- 中項目1行 -->
+          <div class="m">3）ライフステージ別の健康課題</div>
+          <div class="s"><ul>
+            <li>乳幼児期、学童期、思春期、青年期、壮年期、前期高齢期、後期高齢期</li>   <!-- 小項目 -->
+          </ul></div>
+        </div>
+        … 中項目が続く …
+      </div>
+      … 大項目が続く …
+    </div>
+  </section>
+  <section class="subject g-senmon" id="s13"> … </section>   <!-- 専門科目は g-senmon（緑） -->
+  … s19 まで …
+
+  <div class="kj-empty">該当する項目はありません</div>
+</div>
+
+<script> …（下のJS）… </script>
+<!-- ▲ ここまで -->
