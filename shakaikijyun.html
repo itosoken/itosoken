@@ -1,5 +1,5 @@
 <!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>社会福祉士国家試験 出題基準（第37回〜）科目別</title><style>body{margin:0;padding:12px;background:#fff}</style></head><body>
+<title>社会福祉士国家試験 出題基準（第37回〜）科目別</title><style>html,body{margin:0;padding:0;background:#fff}body{padding:12px}</style></head><body>
 <!-- ▼ ここから：社会福祉士 出題基準 科目別表示（ホームページ埋め込み用） -->
 <style>#kijun-app .g-common{--acc:#1f5fa8;--bg:#e8f0fa;--dark:#143d6b;--line:#c9d6e6;--soft:#f6f9fc}
 #kijun-app .g-senmon{--acc:#1e7f4f;--bg:#e6f4ec;--dark:#0f4d2e;--line:#bfdccb;--soft:#f4faf6}
@@ -20,6 +20,12 @@
 #kijun-app .subject .mid .s li{padding-left:.9em;text-indent:-.9em}
 #kijun-app .subject .mid .s li:before{content:'●';font-size:.55em;color:var(--acc);margin-right:.45em;position:relative;top:-.15em}
 #kijun-app .subject .foot{margin-top:12px;font-size:11px;color:#777;border-top:1px solid #ddd;padding-top:6px;display:flex;justify-content:space-between}
+#kijun-app h2,#kijun-app h3,#kijun-app ul,#kijun-app li,#kijun-app p{margin:0;padding:0;border:0;background:none;text-shadow:none;font-weight:inherit;line-height:inherit}
+#kijun-app ul{list-style:none}
+#kijun-app .subject .major>h3{display:block;border-left:0;letter-spacing:0}
+#kijun-app button{text-transform:none;letter-spacing:0;box-shadow:none;text-shadow:none;margin:0}
+#kijun-app .subject .mid{position:static;float:none;height:auto;min-height:0}
+#kijun-app .subject .mid .m,#kijun-app .subject .mid .s{position:static;float:none;height:auto;overflow:visible}
 #kijun-app{box-sizing:border-box;font-family:'Noto Sans CJK JP','Noto Sans JP','Hiragino Sans','Yu Gothic',Meiryo,sans-serif;color:#222;line-height:1.5;max-width:1400px;margin:0 auto}
 #kijun-app *{box-sizing:border-box}
 #kijun-app .kj-tabs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 6px}
@@ -147,4 +153,15 @@
 })();
 </script>
 <!-- ▲ ここまで -->
+<script>
+(function(){
+  if(window.parent===window) return;
+  var last=0;
+  function send(){ var el=document.getElementById('kijun-app'); var h=Math.ceil(el.getBoundingClientRect().bottom+window.pageYOffset+12); if(h!==last){ last=h; try{ parent.postMessage({kijunHeight:h},'*'); }catch(e){} } }
+  window.addEventListener('load',send); window.addEventListener('resize',send); window.addEventListener('hashchange',function(){setTimeout(send,50);});
+  document.addEventListener('click',function(){ setTimeout(send,50); setTimeout(send,300); });
+  document.addEventListener('input',function(){ setTimeout(send,100); });
+  setInterval(send,1000);
+})();
+</script>
 </body></html>
