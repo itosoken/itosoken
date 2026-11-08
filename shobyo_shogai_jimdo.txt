@@ -1,0 +1,1 @@
+<iframe src="https://itosoken.github.io/itosoken/shobyo_shogai.html" title="傷病・障害の社会保障 確認テスト" style="display:block;width:100%;height:90vh;min-height:640px;max-height:1000px;border:1px solid #dbe5df;border-radius:12px;background:#f4f7f3;" loading="lazy"></iframe>
