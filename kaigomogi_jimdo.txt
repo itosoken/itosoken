@@ -1,0 +1,5 @@
+【模擬試験1】Jimdoの「ウィジェット/HTML」に貼り付けるコード
+<iframe title="第39回介護福祉士国家試験 模擬試験" src="https://itosoken.github.io/itosoken/kaigomogi1.html" style="display:block;width:100%;max-width:100%;height:85vh;min-height:600px;border:0"></iframe>
+
+【模擬試験2】Jimdoの「ウィジェット/HTML」に貼り付けるコード
+<iframe title="第39回介護福祉士国家試験 模擬試験２" src="https://itosoken.github.io/itosoken/kaigomogi2.html" style="display:block;width:100%;max-width:100%;height:85vh;min-height:600px;border:0"></iframe>
