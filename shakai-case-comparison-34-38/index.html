@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="社会福祉士国家試験 第34〜38回の事例問題を、回次・ライフイベント・設問の型で比較。">
+  <title>社会福祉士 事例問題の分析｜いとう総研</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#compare">比較へ移動</a>
+  <header class="top">
+    <div class="top-inner">
+      <a href="./" class="identity"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>いとう総研</span></a>
+    </div>
+  </header>
+  <main>
+    <section class="hero wrap" aria-labelledby="site-title">
+      <div class="hero-main">
+        <p class="hero-label">社会福祉士国家試験 <span></span> 第34〜38回</p>
+        <h1 id="site-title">事例問題の分析</h1>
+      </div>
+      <div class="hero-eras" aria-label="科目改定">
+        <div><span class="dot old"></span><span><strong>旧科目</strong><small>第34〜36回</small></span></div>
+        <span class="era-line" aria-hidden="true"></span>
+        <div><span class="dot new"></span><span><strong>新科目</strong><small>第37〜38回</small></span></div>
+      </div>
+    </section>
+    <section id="compare" class="wrap compare" aria-labelledby="compare-title">
+      <div class="section-head"><h2 id="compare-title">出題傾向</h2></div>
+      <div class="stats">
+        <div class="rate-comparison" id="rates" role="group" aria-label="旧科目と新科目の事例問題割合"></div>
+        <div class="lecture-callout">
+          <p class="lecture-bubble">新科目では、事例問題の割合が<br><strong class="trend-emphasis" id="trend-rounded"></strong><br><span id="trend-gain"></span></p>
+          <img class="lecture-character" src="./assets/lecturer.png" width="403" height="430" alt="">
+        </div>
+      </div>
+      <section aria-labelledby="exam-summary-title">
+        <div class="section-head exam-heading">
+          <h2 id="exam-summary-title">第38回の事例問題</h2>
+          <span class="count-label" id="exam-total"></span>
+        </div>
+        <div class="stats">
+          <dl class="exam-types" id="exam-types"></dl>
+          <div class="lecture-callout">
+            <p class="lecture-bubble">事例問題は大きく分けて、<br><strong class="knowledge">知識系</strong>と<strong class="response">対応系</strong>の<br><b>2つ</b>に分かれます。</p>
+            <img class="lecture-character" src="./assets/lecturer-waving.png" width="190" height="208" alt="">
+          </div>
+        </div>
+      </section>
+      <div class="section-head"><h2 id="analysis-title">事例問題の対策</h2></div>
+      <section class="panel study-strategy" aria-labelledby="strategy-title">
+        <div class="strategy-content">
+          <h3 id="strategy-title">合格に向けた事例対策のポイント</h3>
+          <ol class="strategy-points">
+            <li>
+              <h4>対応系は<strong>正答率100％</strong>を目指す</h4>
+              <p>第38回なら、対応系の全15問に正解すれば<strong>15点</strong>です。「黄金の法則」を使って、なぜその対応を選ぶのか、自信を持って説明できるようにしましょう。</p>
+            </li>
+            <li>
+              <h4>知識系は<strong>社会保障制度</strong>を得意分野に</h4>
+              <p>「誰が、どんなときに、どの給付やサービスを受けられるか」。この3つを軸に制度を体系的に整理し、事例の人物に当てはめて考えましょう。</p>
+            </li>
+          </ol>
+        </div>
+        <div class="lecture-callout strategy-callout">
+          <p class="lecture-bubble">苦手になりやすい<br>社会保障の事例こそ、<br><strong class="knowledge">他の受験生と差がつくところ！</strong><br>ここから一緒に整理しましょう。</p>
+          <img class="lecture-character" src="./assets/lecturer-cheering.png" width="474" height="609" alt="">
+        </div>
+      </section>
+      <div class="panel dashboard" id="case-analysis" aria-labelledby="analysis-title" role="region">
+        <div class="filter-bar">
+          <label class="filter-field"><span class="field-label">出題分野</span><select id="domain"></select></label>
+          <label class="filter-field"><span class="field-label">設問の型</span><select id="type"></select></label>
+          <button class="muted-button reset" id="reset" type="button">初期表示に戻す</button>
+        </div>
+        <div class="dashboard-body">
+          <div class="tabs" id="views" role="group" aria-label="比較の切り口">
+            <button data-view="overview" type="button">全体</button>
+            <button data-view="type" type="button">知識系・対応系</button>
+            <button data-view="breakdown" type="button">分類の内訳</button>
+            <button data-view="age" type="button">利用者の年齢別</button>
+            <button data-view="event" type="button">ライフイベント</button>
+            <button data-view="subject" type="button">科目</button>
+          </div>
+          <section id="life-guide" class="life-guide" aria-labelledby="life-guide-title" hidden>
+            <h3 id="life-guide-title">ライフイベントと社会保障制度</h3>
+            <p class="life-question">「Aさんは何歳ですか？」「何に困っていますか？」</p>
+            <p>この2つを掛け合わせると、制度を科目の枠を越えて整理できます。まずは、出産から葬祭までの人生の流れをたどってみましょう。</p>
+            <ol class="life-stages">
+              <li>
+                <div>
+                  <h4>生まれ、学び、働く準備をする</h4>
+                  <p><strong>出産</strong>から<strong>保育・教育</strong>へ。高校生の頃からは、進学や職業訓練を通じて<strong>就労・生業</strong>へと進む道もあります。自分が子どもとして生まれ育つ家族を「<strong>定位家族</strong>」といいます。</p>
+                </div>
+                <div class="life-scenes">
+                  <figure><img src="./assets/life/baby.webp" alt="おくるみの中で笑う赤ちゃん" width="256" height="256" loading="lazy"><figcaption>赤ちゃん</figcaption></figure>
+                  <figure><img src="./assets/life/school.webp" alt="ランドセルを背負い、黄色い通学帽をかぶった小学生" width="256" height="256" loading="lazy"><figcaption>小学生</figcaption></figure>
+                  <figure><img src="./assets/life/student.webp" alt="制服を着て教科書を抱えた高校生" width="256" height="256" loading="lazy"><figcaption>高校生</figcaption></figure>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <h4>親元を離れ、暮らしを築く</h4>
+                  <p>親元から独立するときは、部屋を借りるなどして<strong>住宅</strong>を確保し、働いて<strong>生活費</strong>をまかないます。結婚などを通じて自分が新たに築く家族を「<strong>創設家族</strong>」といいます。</p>
+                </div>
+                <div class="life-scenes">
+                  <figure><img src="./assets/life/family.webp" alt="新居の前で鍵を手に寄り添う夫婦" width="256" height="256" loading="lazy"><figcaption>創設家族</figcaption></figure>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <h4>健康を守り、日々の生活を支える</h4>
+                  <p>健診などで病気を予防するのが<strong>保健</strong>。病気やけがを治療するときは<strong>医療</strong>保険が支えます。食事や入浴などに<strong>介護</strong>が必要になったら、介護保険や障害者総合支援法のサービスを考えます。</p>
+                </div>
+                <div class="life-scenes">
+                  <figure><img src="./assets/life/exercise.webp" alt="健康づくりのためにジョギングする人" width="256" height="256" loading="lazy"><figcaption>保健</figcaption></figure>
+                  <figure><img src="./assets/life/medical.webp" alt="診察室で患者の胸に聴診器を当てる医師" width="256" height="256" loading="lazy"><figcaption>医療</figcaption></figure>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <h4>社会復帰や権利を支え、最期を迎える</h4>
+                  <p>罪を犯した人の社会復帰を支えるのが<strong>更生保護</strong>です。認知症などで判断能力が低下し、契約や金銭管理に困ったときは、成年後見制度などの<strong>権利擁護</strong>を考えます。人生の最後には、死亡に伴う<strong>葬祭</strong>への支援があります。</p>
+                </div>
+                <div class="life-scenes">
+                  <figure><img src="./assets/life/reentry.webp" alt="出所後、施設の門から支援者と一緒に歩き出す人" width="256" height="256" loading="lazy"><figcaption>更生保護</figcaption></figure>
+                  <figure><img src="./assets/life/guardian.webp" alt="高齢の女性が後見人と一緒に書類を確認する場面" width="256" height="256" loading="lazy"><figcaption>権利擁護</figcaption></figure>
+                  <figure><img src="./assets/life/funeral.webp" alt="白い花に囲まれた遺影に手を合わせる遺族" width="256" height="256" loading="lazy"><figcaption>葬祭</figcaption></figure>
+                </div>
+              </li>
+            </ol>
+            <p class="life-ages"><b>年齢の目安</b><span>児童 <strong>18歳未満</strong></span><span>成人 <strong>18〜64歳</strong></span><span>高齢者 <strong>65歳以上</strong></span></p>
+            <p class="life-example"><strong>事例で読むと</strong>　第38回問51のCさんは70歳。住まいの建て替えで立ち退きを求められ、保証人のことで困っています。「高齢者」と「住宅」が交わるところから考えると、住まい探しや入居手続きを支援する居住支援法人が候補に挙がります。</p>
+            <details class="life-reference">
+              <summary>年齢別の制度を講義図で見る</summary>
+              <p>縦にライフイベント、横に年齢を見ます。交わる欄が制度を探す手がかりです。実際の利用条件は制度ごとに確認します。</p>
+              <div class="life-figure" role="region" aria-label="ライフイベントと年齢別の制度例。横にスクロールできます" tabindex="0">
+                <img src="./assets/life-events-by-age.png" alt="ライフイベント11項目と児童・成年者・高齢者の対応表。住宅は公営住宅、医療は医療扶助など、複数の年齢にまたがる制度も掲載。" loading="lazy" width="991" height="1222">
+              </div>
+            </details>
+          </section>
+          <div class="chart-head" id="comparison-results">
+            <div><h3 id="chart-title"></h3><p id="chart-note"></p></div>
+            <div class="segments" id="units" role="group" aria-label="集計の表示単位">
+              <button type="button" data-unit="count">問題数</button>
+              <button type="button" data-unit="rate">割合</button>
+              <button type="button" data-unit="parent" hidden>知識系内比</button>
+            </div>
+          </div>
+          <div id="chart"></div>
+        </div>
+      </div>
+    </section>
+    <section id="questions" class="wrap questions" aria-labelledby="questions-title">
+      <div class="section-head"><h2 id="questions-title">根拠となる問題</h2><span class="count-label" id="result-count" aria-live="polite"></span></div>
+      <div class="panel" id="question-browser">
+        <div class="list-tools">
+          <div class="list-context" id="list-context"></div>
+          <label class="filter-field search-field"><span class="field-label">問題番号・キーワード</span><input id="search" type="search" placeholder="例　105、成年後見"></label>
+        </div>
+        <div id="question-list"></div>
+        <div id="pagination" class="pagination" aria-label="問題一覧のページ"></div>
+      </div>
+      <article class="panel practice" id="practice" aria-labelledby="practice-title" hidden></article>
+    </section>
+  </main>
+  <dialog id="event-study" class="event-study" aria-labelledby="event-study-title">
+    <header class="study-head">
+      <img id="event-study-image" alt="" width="52" height="52">
+      <h2 id="event-study-title" tabindex="-1"></h2>
+      <form method="dialog"><button type="submit" class="muted-button">閉じる</button></form>
+    </header>
+    <div id="event-study-body" class="study-body"></div>
+  </dialog>
+  <footer class="wrap footer">いとう総研 <span>社会福祉士国家試験の出題分析</span></footer>
+  <noscript>比較機能を使うには、ブラウザーで JavaScript を有効にしてください。</noscript>
+</body>
+</html>
