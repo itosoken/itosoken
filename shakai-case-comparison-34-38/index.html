@@ -77,15 +77,63 @@
           <button class="muted-button reset" id="reset" type="button">初期表示に戻す</button>
         </div>
         <div class="dashboard-body">
-          <div class="tabs" id="views" role="group" aria-label="比較の切り口">
-            <button data-view="overview" type="button">全体</button>
-            <button data-view="type" type="button">知識系・対応系</button>
-            <button data-view="breakdown" type="button">分類の内訳</button>
-            <button data-view="age" type="button">利用者の年齢別</button>
-            <button data-view="event" type="button">ライフイベント</button>
-            <button data-view="subject" type="button">科目</button>
+          <section class="view-section" id="view-overview" data-view="overview" aria-labelledby="chart-title-overview">
+            <div class="chart-head">
+              <div><h3 id="chart-title-overview"></h3><p class="chart-note"></p></div>
+              <div class="segments" role="group" aria-label="集計の表示単位">
+                <button type="button" data-unit="count">問題数</button>
+                <button type="button" data-unit="rate">割合</button>
+              </div>
+            </div>
+            <div class="chart"></div>
+          </section>
+          <section class="view-section" id="view-type" data-view="type" aria-labelledby="chart-title-type">
+            <div class="chart-head">
+              <div><h3 id="chart-title-type"></h3><p class="chart-note"></p></div>
+              <div class="segments" role="group" aria-label="集計の表示単位">
+                <button type="button" data-unit="count">問題数</button>
+                <button type="button" data-unit="rate">割合</button>
+              </div>
+            </div>
+            <div class="chart"></div>
+          </section>
+          <section class="view-section" id="view-event" data-view="event" aria-labelledby="chart-title-event">
+            <div class="chart-head">
+              <div><h3 id="chart-title-event"></h3><p class="chart-note"></p></div>
+              <div class="segments" role="group" aria-label="集計の表示単位">
+                <button type="button" data-unit="count">問題数</button>
+                <button type="button" data-unit="rate">割合</button>
+              </div>
+            </div>
+            <div class="chart"></div>
+          </section>
+          <div class="more-views" id="more-views" role="group" aria-labelledby="more-views-title">
+            <p id="more-views-title">さらに詳しい分析を見る<small>ボタンを押すと、その分析が開きます。</small></p>
+            <div class="more-buttons">
+              <button type="button" data-open="breakdown" aria-pressed="false"><strong>分類の内訳</strong><small>知識系（社会保障制度・それ以外）と対応系の内訳</small></button>
+              <button type="button" data-open="age" aria-pressed="false"><strong>利用者の年齢別</strong><small>児童・成人・高齢者ごとの出題数</small></button>
+              <button type="button" data-open="guide" aria-pressed="false"><strong>ライフイベントと社会保障制度</strong><small>出産から葬祭までの流れと講義図</small></button>
+              <button type="button" data-open="subject" aria-pressed="false"><strong>科目系統別</strong><small>旧科目・新科目を系統でまとめた出題数</small></button>
+            </div>
           </div>
-          <section id="life-guide" class="life-guide" aria-labelledby="life-guide-title" hidden>
+          <section class="view-section extra-view" id="view-breakdown" data-extra="breakdown" hidden data-view="breakdown" aria-labelledby="chart-title-breakdown">
+            <div class="chart-head">
+              <div><h3 id="chart-title-breakdown"></h3><p class="chart-note"></p></div>
+              <div class="segments" role="group" aria-label="集計の表示単位">
+                <button type="button" data-unit="count">問題数</button>
+                <button type="button" data-unit="rate">全事例比</button>
+                <button type="button" data-unit="parent">知識系内比</button>
+              </div>
+            </div>
+            <div class="chart"></div>
+          </section>
+          <section class="view-section extra-view" id="view-age" data-extra="age" hidden data-view="age" aria-labelledby="chart-title-age">
+            <div class="chart-head">
+              <div><h3 id="chart-title-age"></h3><p class="chart-note"></p></div>
+            </div>
+            <div class="chart"></div>
+          </section>
+          <section id="view-guide" class="life-guide extra-view" data-extra="guide" hidden aria-labelledby="life-guide-title">
             <h3 id="life-guide-title">ライフイベントと社会保障制度</h3>
             <p class="life-question">「Aさんは何歳ですか？」「何に困っていますか？」</p>
             <p>この2つを掛け合わせると、制度を科目の枠を越えて整理できます。まずは、出産から葬祭までの人生の流れをたどってみましょう。</p>
@@ -134,7 +182,7 @@
             </ol>
             <p class="life-ages"><b>年齢の目安</b><span>児童 <strong>18歳未満</strong></span><span>成人 <strong>18〜64歳</strong></span><span>高齢者 <strong>65歳以上</strong></span></p>
             <p class="life-example"><strong>事例で読むと</strong>　第38回問51のCさんは70歳。住まいの建て替えで立ち退きを求められ、保証人のことで困っています。「高齢者」と「住宅」が交わるところから考えると、住まい探しや入居手続きを支援する居住支援法人が候補に挙がります。</p>
-            <details class="life-reference">
+            <details class="life-reference" open>
               <summary>年齢別の制度を講義図で見る</summary>
               <p>縦にライフイベント、横に年齢を見ます。交わる欄が制度を探す手がかりです。実際の利用条件は制度ごとに確認します。</p>
               <div class="life-figure" role="region" aria-label="ライフイベントと年齢別の制度例。横にスクロールできます" tabindex="0">
@@ -142,15 +190,16 @@
               </div>
             </details>
           </section>
-          <div class="chart-head" id="comparison-results">
-            <div><h3 id="chart-title"></h3><p id="chart-note"></p></div>
-            <div class="segments" id="units" role="group" aria-label="集計の表示単位">
-              <button type="button" data-unit="count">問題数</button>
-              <button type="button" data-unit="rate">割合</button>
-              <button type="button" data-unit="parent" hidden>知識系内比</button>
+          <section class="view-section extra-view" id="view-subject" data-extra="subject" hidden data-view="subject" aria-labelledby="chart-title-subject">
+            <div class="chart-head">
+              <div><h3 id="chart-title-subject"></h3><p class="chart-note"></p></div>
+              <div class="segments" role="group" aria-label="集計の表示単位">
+                <button type="button" data-unit="count">問題数</button>
+                <button type="button" data-unit="rate">割合</button>
+              </div>
             </div>
-          </div>
-          <div id="chart"></div>
+            <div class="chart"></div>
+          </section>
         </div>
       </div>
     </section>

@@ -40,11 +40,32 @@ const securityTotals = Object.fromEntries(exams.map(({round}) => [round, questio
 
 const $ = selector => document.querySelector(selector);
 const requestedView = new URLSearchParams(location.search).get('view');
-const entryView = ['breakdown', 'age', 'event'].includes(requestedView) ? requestedView : 'overview';
+const viewKeys = ['overview', 'type', 'breakdown', 'age', 'event', 'subject'];
 const initial = () => ({
-  domain: 'all', type: 'all', view: entryView, unit: 'count', drill: null, query: '', page: 0
+  domain: 'all', type: 'all', view: 'overview', open: null, drill: null, query: '', page: 0,
+  units: Object.fromEntries(viewKeys.map(view => [view, 'count']))
 });
 let state = initial();
+// 描画中の切り口。グラフは全切り口を順に描き、問題一覧は最後に選ばれた切り口（state.view）で描く。
+let activeView = 'overview';
+// トップページには全体・知識系/対応系・ライフイベントの表だけを出し、残りはボタンで開く。
+const extraKeys = ['breakdown', 'age', 'guide', 'subject'];
+function showExtra() {
+  for (const panel of document.querySelectorAll('[data-extra]')) panel.hidden = panel.dataset.extra !== state.open;
+  for (const button of document.querySelectorAll('#more-views [data-open]')) {
+    button.setAttribute('aria-pressed', String(button.dataset.open === state.open));
+  }
+}
+function openExtra(key) {
+  state.open = key;
+  showExtra();
+  const panel = document.getElementById(`view-${key}`);
+  const heading = panel.querySelector('h3');
+  heading.tabIndex = -1;
+  heading.focus({preventScroll: true});
+  panel.scrollIntoView({block: 'start'});
+}
+const unit = () => state.units[activeView];
 const pageSize = 15;
 let listedQuestions = [];
 let practiceIndex = -1;
@@ -60,6 +81,8 @@ function start() {
   $('#type').innerHTML = '<option value="all">すべての型</option>' + options(types);
   renderStats();
   render();
+  if (extraKeys.includes(requestedView)) openExtra(requestedView);
+  else if (viewKeys.includes(requestedView)) document.getElementById(`view-${requestedView}`).scrollIntoView({block: 'start'});
 }
 
 function options(labels) {
@@ -119,47 +142,46 @@ function filtered() {
   return questions.filter(q =>
     (state.domain === 'all' || state.domain === q.domain) &&
     (state.type === 'all' || state.type === q.type) &&
-    (state.view !== 'event' || q.domain === 'security')
+    (activeView !== 'event' || q.domain === 'security')
   );
 }
 
 function render() {
-  for (const button of $('#views').querySelectorAll('button')) {
-    button.setAttribute('aria-pressed', String(button.dataset.view === state.view));
-  }
-  for (const button of $('#units').querySelectorAll('button')) {
-    if (button.dataset.unit === 'parent') button.hidden = state.view !== 'breakdown';
-    if (button.dataset.unit === 'rate') button.textContent = state.view === 'breakdown' ? '全事例比' : '割合';
-    button.setAttribute('aria-pressed', String(button.dataset.unit === state.unit));
-  }
-  $('#units').hidden = state.view === 'age';
+  showExtra();
   $('#domain').value = state.domain;
   $('#type').value = state.type;
   $('#search').value = state.query;
-  renderChart();
+  for (const section of document.querySelectorAll('.view-section')) {
+    activeView = section.dataset.view;
+    for (const button of section.querySelectorAll('[data-unit]')) {
+      button.setAttribute('aria-pressed', String(button.dataset.unit === unit()));
+    }
+    renderChart(section);
+  }
+  activeView = state.view;
   renderList();
 }
 
 function denominator(round) {
-  if (state.view === 'event') return securityTotals[round];
-  if (state.view === 'overview') return examFor.get(round).total;
+  if (activeView === 'event') return securityTotals[round];
+  if (activeView === 'overview') return examFor.get(round).total;
   return totals[round];
 }
 
 function measure(count, denom) {
-  return state.unit === 'rate' ? percent(count, denom) : count;
+  return unit() === 'rate' ? percent(count, denom) : count;
 }
 
 function format(value) {
-  return state.unit === 'rate' ? `${value.toFixed(1)}%` : String(value);
+  return unit() === 'rate' ? `${value.toFixed(1)}%` : String(value);
 }
 
 function chartButton(label, round, key, count, className, style, content) {
-  const selected = state.drill?.round === round && state.drill?.key === key;
-  return `<button type="button" class="${className}" data-drill="${key}" data-round="${round}" aria-pressed="${selected}" aria-label="${escape(label)} ${count}問の問題一覧" style="${style}">${content}</button>`;
+  const selected = state.view === activeView && state.drill?.round === round && state.drill?.key === key;
+  return `<button type="button" class="${className}" data-view="${activeView}" data-drill="${key}" data-round="${round}" aria-pressed="${selected}" aria-label="${escape(label)} ${count}問の問題一覧" style="${style}">${content}</button>`;
 }
 
-function renderChart() {
+function renderChart(section) {
   const labels = {
     overview: ['回次別の事例問題', '割合の分母は各回の全問題数。棒を選ぶと問題一覧に移動します。'],
     type: ['知識系と対応系の比較', '割合の分母は各回の全事例数。棒を選ぶと問題一覧に移動します。'],
@@ -168,25 +190,25 @@ function renderChart() {
     event: ['ライフイベント別の出題', '項目名やイラストを選ぶと、解答に必要な制度・法律を確認できます。各回の数字を選ぶと該当する問題の一覧が開きます。割合の分母は各回の「社会保障理解」の事例数です。'],
     subject: ['科目系統別の出題', '類似する旧・新科目を同じ系統にまとめました。割合の分母は各回の全事例数です。']
   };
-  const [title, note] = labels[state.view];
-  $('#life-guide').hidden = state.view !== 'event';
-  $('#chart-title').textContent = title;
-  $('#chart-note').textContent = state.view === 'event' && ['practice', 'other'].includes(state.domain) ?
+  const [title, note] = labels[activeView];
+  const chart = section.querySelector('.chart');
+  section.querySelector('h3[id^="chart-title"]').textContent = title;
+  section.querySelector('.chart-note').textContent = activeView === 'event' && ['practice', 'other'].includes(state.domain) ?
     `${note} 出題分野を「すべて」か「社会保障理解」に切り替えると表示されます。` : note;
   const rows = filtered();
-  if (state.view === 'age') {
-    $('#chart').innerHTML = ageChart(rows, exams, chartButton);
+  if (activeView === 'age') {
+    chart.innerHTML = ageChart(rows, exams, chartButton);
     return;
   }
-  if (state.view === 'breakdown') {
-    $('#chart').innerHTML = breakdownMatrix(rows);
+  if (activeView === 'breakdown') {
+    chart.innerHTML = breakdownMatrix(rows);
     return;
   }
-  $('#chart').innerHTML = state.view === 'overview' || state.view === 'type' ? barChart(rows) : matrix(rows);
+  chart.innerHTML = activeView === 'overview' || activeView === 'type' ? barChart(rows) : matrix(rows);
 }
 
 function barChart(rows) {
-  const byType = state.view === 'type';
+  const byType = activeView === 'type';
   const selectedTypes = state.type === 'all' ? Object.keys(types) : [state.type];
   const columns = exams.map(exam => {
     const series = byType ? selectedTypes.map(key => ({key, label: types[key], color: key})) :
@@ -198,10 +220,10 @@ function barChart(rows) {
     })};
   });
   const maximum = Math.max(...columns.flatMap(column => column.series.map(bar => bar.value)));
-  const quantum = state.unit === 'rate' ? 5 : 2;
+  const quantum = unit() === 'rate' ? 5 : 2;
   const ceiling = Math.max(quantum * 4, Math.ceil((maximum * 1.14) / (quantum * 4)) * quantum * 4);
   const ticks = [0,1,2,3,4].map(i => {
-    const suffix = state.unit === 'rate' ? '%' : '';
+    const suffix = unit() === 'rate' ? '%' : '';
     return `<span style="bottom:${i * 25}%">${i * ceiling / 4}${suffix}</span>`;
   }).join('');
   const legend = Object.entries(byType ? types : eras).map(([key, label]) =>
@@ -230,15 +252,15 @@ function barChart(rows) {
 }
 
 function classify(q) {
-  if (state.view === 'event') return q.event;
-  if (state.view === 'subject') return String(examFor.get(q.round).subjects[q.subject].group);
-  if (state.view === 'type') return q.type;
-  if (state.view === 'breakdown') return q.category;
+  if (activeView === 'event') return q.event;
+  if (activeView === 'subject') return String(examFor.get(q.round).subjects[q.subject].group);
+  if (activeView === 'type') return q.type;
+  if (activeView === 'breakdown') return q.category;
   return 'all';
 }
 
 function matrix(rows) {
-  const byEvent = state.view === 'event';
+  const byEvent = activeView === 'event';
   const dimensions = byEvent ? events : groups.map((label, index) => [String(index), label]);
   const bucket = new Map();
   for (const q of rows) {
@@ -248,8 +270,8 @@ function matrix(rows) {
   const high = Math.max(1, ...bucket.values());
   const den = sum(exams.map(exam => denominator(exam.round)));
   const legend = byEvent ? '<p class="event-total-legend">ピンクの合計欄は、5回分で11問以上出題された項目です。</p>' : '';
-  return `${legend}<div class="matrix-scroll" role="region" tabindex="0" aria-labelledby="chart-title">
-  <table class="matrix${byEvent ? ' event-matrix' : ''}" aria-labelledby="chart-title">
+  return `${legend}<div class="matrix-scroll" role="region" tabindex="0" aria-labelledby="chart-title-${activeView}">
+  <table class="matrix${byEvent ? ' event-matrix' : ''}" aria-labelledby="chart-title-${activeView}">
     <thead><tr><th scope="col">${byEvent ? 'ライフイベント' : '科目系統'}</th>
       ${exams.map(exam => `<th scope="col">第${exam.round}回<br>${eras[exam.era]}</th>`).join('')}
       <th scope="col">合計</th></tr></thead>
@@ -293,10 +315,10 @@ function breakdownMatrix(rows) {
 
   function cell(set, category, round) {
     const {parent, label} = breakdownTypes[category];
-    if (state.unit === 'parent' && parent === 'response') return '<td><span class="zero">—</span></td>';
+    if (unit() === 'parent' && parent === 'response') return '<td><span class="zero">—</span></td>';
     const count = countFor(set, category);
-    const denominator = state.unit === 'parent' ? totalFor(set, parent) : set.length;
-    const value = state.unit === 'count' ? String(count) : denominator ?
+    const denominator = unit() === 'parent' ? totalFor(set, parent) : set.length;
+    const value = unit() === 'count' ? String(count) : denominator ?
       `${percent(count, denominator).toFixed(1)}%` : '—';
     const roundLabel = round ? `第${round}回` : '全5回 合計';
     const color = `cell breakdown-cell ${category}`;
@@ -321,15 +343,15 @@ function breakdownMatrix(rows) {
         </tbody>
         <tbody>${row('response')}</tbody>
       </table>
-    </div><p class="age-shortcut"><button type="button" class="age-inline" data-open-age>利用者の年齢別にみた出題を見る</button></p>`;
+    </div>`;
 }
 
 function lookupLabel(drill) {
   if (!drill || drill.key === 'all') return '';
-  if (state.view === 'age') return ageLabels[drill.key];
-  if (state.view === 'event') return eventFor.get(drill.key);
-  if (state.view === 'subject') return groups[Number(drill.key)];
-  if (state.view === 'breakdown') return breakdownTypes[drill.key]?.label;
+  if (activeView === 'age') return ageLabels[drill.key];
+  if (activeView === 'event') return eventFor.get(drill.key);
+  if (activeView === 'subject') return groups[Number(drill.key)];
+  if (activeView === 'breakdown') return breakdownTypes[drill.key]?.label;
   return types[drill.key];
 }
 
@@ -344,7 +366,7 @@ function matchesSearch(q, query) {
   const exam = examFor.get(q.round);
   const haystack = normalize([
     `第${q.round}回 問${q.number}`, `問題${q.number}`, exam.subjects[q.subject].name,
-    state.view === 'age' ? ageEvidence(q) : '', q.title, q.note, q.rationale, types[q.type], breakdownTypes[q.category].label, domains[q.domain], eventFor.get(q.event) ?? ''
+    activeView === 'age' ? ageEvidence(q) : '', q.title, q.note, q.rationale, types[q.type], breakdownTypes[q.category].label, domains[q.domain], eventFor.get(q.event) ?? ''
   ].join(' '));
   return query.split(/\s+/).every(part => haystack.includes(part));
 }
@@ -355,7 +377,7 @@ function renderList() {
   const list = filtered().filter(q => {
     if (drill?.round && q.round !== drill.round) return false;
     if (drill && drill.key !== 'all') {
-      const inGroup = state.view === 'age' ? matchesAge(q, drill.key) : classify(q) === drill.key;
+      const inGroup = activeView === 'age' ? matchesAge(q, drill.key) : classify(q) === drill.key;
       if (!inGroup) return false;
     }
     return matchesSearch(q, query);
@@ -369,7 +391,7 @@ function renderList() {
   state.page = Math.min(state.page, maxPage);
   const message = drill ? `${drill.round ? `第${drill.round}回` : '全5回'} ${lookupLabel(drill)}`.trim() : [
     '全5回',
-    state.view === 'event' ? 'ライフイベントの対象' : (domains[state.domain] ?? 'すべての分野'),
+    activeView === 'event' ? 'ライフイベントの対象' : (domains[state.domain] ?? 'すべての分野'),
     types[state.type] ?? ''
   ].filter(Boolean).join(' ／ ');
   $('#result-count').textContent = `${count}問`;
@@ -390,8 +412,8 @@ function questionRow(q) {
   const exam = examFor.get(q.round);
   const subject = exam.subjects[q.subject];
   const key = `${q.round}-${q.number}`;
-  const showBreakdown = state.view === 'breakdown';
-  const showAge = state.view === 'age';
+  const showBreakdown = activeView === 'breakdown';
+  const showAge = activeView === 'age';
   const ageInfo = showAge ? `<small class="age-source">${escape(ageEvidence(q))}</small>` : '';
   let reason = showBreakdown ? q.rationale : q.note;
   if (showAge) reason = q.age.note || q.note;
@@ -584,21 +606,6 @@ $('#reset').addEventListener('click', () => {
   render();
 });
 
-$('#views').addEventListener('click', event => {
-  const view = event.target.closest('button')?.dataset.view;
-  if (!view || view === state.view) return;
-  state.view = view;
-  if (state.unit === 'parent' && view !== 'breakdown') state.unit = 'count';
-  if (view === 'event' && !['all', 'security'].includes(state.domain)) state.domain = 'all';
-  changeFilter();
-});
-$('#units').addEventListener('click', event => {
-  const unit = event.target.closest('button')?.dataset.unit;
-  if (!unit || (unit === 'parent' && state.view !== 'breakdown')) return;
-  state.unit = unit;
-  render();
-});
-
 function openEventStudy(key) {
   const study = eventKnowledge[key];
   const name = eventFor.get(key);
@@ -641,6 +648,7 @@ $('#event-study-body').addEventListener('click', event => {
   const dialog = $('#event-study');
   const key = dialog.dataset.event;
   dialog.close();
+  state.view = 'event';
   state.drill = {round: 0, key};
   state.query = '';
   state.page = 0;
@@ -655,20 +663,26 @@ $('#event-study-body').addEventListener('click', event => {
   }
 });
 
-$('#chart').addEventListener('click', event => {
+$('#case-analysis').addEventListener('click', event => {
+  const openButton = event.target.closest('button[data-open]');
+  if (openButton) {
+    openExtra(openButton.dataset.open);
+    return;
+  }
+  const unitButton = event.target.closest('button[data-unit]');
+  if (unitButton) {
+    state.units[unitButton.closest('.view-section').dataset.view] = unitButton.dataset.unit;
+    render();
+    return;
+  }
   const studyButton = event.target.closest('button[data-event-study]');
   if (studyButton) {
     openEventStudy(studyButton.dataset.eventStudy);
     return;
   }
-  if (event.target.closest('[data-open-age]')) {
-    const ageTab = $('#views button[data-view="age"]');
-    ageTab.click();
-    ageTab.focus();
-    return;
-  }
   const button = event.target.closest('button[data-drill]');
   if (!button) return;
+  state.view = button.dataset.view;
   state.drill = {round: Number(button.dataset.round), key: button.dataset.drill};
   state.query = '';
   state.page = 0;

@@ -81,7 +81,7 @@ export function ageChart(rows, exams, chartButton) {
       ${multiple ? `<p class="age-note">親子など、複数の年齢層が対象の${multiple}問は、該当する各層に1問ずつ数えています。</p>` : ''}
       ${family ? `<p class="age-note">${drill('family', family, '家族だけに年齢の記載がある' + family + '問', 'age-inline')}は、利用者の年齢別集計から除いています。</p>` : ''}
     </section></div>
-    <details class="age-detail"><summary>試験回別の問題数</summary>
+    <details class="age-detail" open><summary>試験回別の問題数</summary>
       <div class="matrix-scroll" tabindex="0" role="region" aria-label="試験回別の年齢分類">
         <table class="matrix age-table"><thead><tr><th scope="col">分類（問）</th>${exams.map(e => '<th scope="col">第' + e.round + '回</th>').join('')}<th scope="col">合計</th></tr></thead><tbody>${tableRows}</tbody></table>
       </div>
