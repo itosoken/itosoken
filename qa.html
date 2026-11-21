@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>社会福祉士講座 Q&amp;A集</title>
+<style>
+  :root {
+    --ink: #1f2a37; --sub: #5b6776; --line: #dfe5ec; --bg: #f5f7fa; --card: #ffffff;
+    --main: #1d4f91; --main-soft: #e8f0fa; --accent: #c2410c; --accent-soft: #fff1e8; --ok: #166534;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.8;
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif; font-size: 16px; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+  header h1 { font-size: 1.5rem; margin: 0 0 4px; letter-spacing: .02em; }
+  header p { margin: 0; color: var(--sub); font-size: .95rem; }
+  .stats { display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 18px; min-width: 150px; }
+  .stat b { display: block; font-size: 1.6rem; color: var(--main); line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .85rem; color: var(--sub); }
+  .ask-btn { display: inline-block; background: var(--accent); color: #fff; border: 0; border-radius: 999px;
+    padding: 12px 26px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .ask-btn:hover { filter: brightness(1.08); }
+  .tools { display: flex; gap: 10px; margin: 22px 0 12px; flex-wrap: wrap; }
+  .tools input, .tools select, .form select, .form textarea {
+    font: inherit; padding: 9px 12px; border: 1px solid #b9c3cf; border-radius: 8px; background: #fff; color: var(--ink); }
+  .tools input { flex: 1 1 220px; }
+  .tools select { flex: 0 1 280px; }
+  .count { color: var(--sub); font-size: .9rem; margin: 0 0 8px; }
+  .qa { background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 14px; overflow: hidden; }
+  .qa-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 12px 16px 0; font-size: .82rem; color: var(--sub); }
+  .tag { background: var(--main-soft); color: var(--main); border-radius: 999px; padding: 1px 10px; font-weight: 700; }
+  .new { background: var(--accent); color: #fff; border-radius: 4px; padding: 0 7px; font-weight: 700; font-size: .75rem; }
+  .q, .a { display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 10px 16px; white-space: pre-wrap; word-break: break-word; }
+  .q { font-weight: 700; }
+  .a { background: #fafcff; border-top: 1px dashed var(--line); padding-bottom: 16px; }
+  .mark { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: .95rem; }
+  .q .mark { background: var(--main); color: #fff; }
+  .a .mark { background: var(--accent-soft); color: var(--accent); border: 1px solid #f3c9ad; }
+  .empty { text-align: center; color: var(--sub); padding: 40px 0; }
+  .form { background: var(--card); border: 2px solid var(--main); border-radius: 12px; padding: 18px; margin: 16px 0; display: none; }
+  .form.open { display: block; }
+  .form h2 { margin: 0 0 6px; font-size: 1.1rem; }
+  .form label { display: block; font-weight: 700; margin: 12px 0 4px; font-size: .92rem; }
+  .form select, .form textarea { width: 100%; }
+  .form textarea { min-height: 150px; resize: vertical; }
+  .note { font-size: .85rem; color: var(--sub); margin: 6px 0 0; }
+  .form-actions { display: flex; gap: 10px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
+  .send { background: var(--main); color: #fff; border: 0; border-radius: 8px; padding: 10px 28px; font: inherit; font-weight: 700; cursor: pointer; }
+  .send:disabled { opacity: .5; cursor: default; }
+  .cancel { background: none; border: 0; color: var(--sub); font: inherit; cursor: pointer; text-decoration: underline; }
+  .msg { font-weight: 700; }
+  .msg.ok { color: var(--ok); } .msg.ng { color: #b91c1c; }
+  .attach { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .attach-btn { background: #fff; border: 1px solid var(--main); color: var(--main); border-radius: 8px; padding: 7px 16px; font: inherit; font-weight: 700; cursor: pointer; }
+  .thumbs { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .thumb { position: relative; }
+  .thumb img { height: 96px; border-radius: 8px; border: 1px solid var(--line); display: block; }
+  .thumb button { position: absolute; top: -8px; right: -8px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: #374151; color: #fff; font-size: 15px; line-height: 1; cursor: pointer; }
+  .pics { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .pics img { max-width: 100%; max-height: 360px; border-radius: 8px; border: 1px solid var(--line); cursor: zoom-in; background: #f1f4f8; }
+  .pics .loading { width: 160px; height: 110px; border-radius: 8px; background: #eef2f6; display: grid; place-items: center; color: var(--sub); font-size: .8rem; font-weight: 400; }
+  .viewer { position: fixed; inset: 0; background: rgba(15,23,42,.88); display: none; place-items: center; padding: 16px; z-index: 10; cursor: zoom-out; }
+  .viewer.open { display: grid; }
+  .viewer img { max-width: 100%; max-height: 100%; border-radius: 6px; }
+  .demo { background: #fff8d6; border: 1px solid #e6d27a; border-radius: 8px; padding: 8px 12px; font-size: .88rem; margin-bottom: 14px; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo" id="demo" hidden>これは見本の表示です。質問と回答はサンプルで、送信しても記録されません。</div>
+  <header>
+    <h1><span id="courseName">社会福祉士</span>講座 Q&amp;A集</h1>
+    <p>受講者のみなさんから届いた質問と、講師の回答を掲載しています。質問はいつでも受け付けています。</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b id="statReceived">-</b><span>これまでに届いた質問</span></div>
+    <div class="stat"><b id="statPublished">-</b><span>掲載中のQ&amp;A</span></div>
+    <div class="stat"><b id="statNew">-</b><span>この30日間の新着</span></div>
+  </div>
+
+  <button class="ask-btn" id="askBtn" type="button">質問する</button>
+
+  <section class="form" id="form" aria-labelledby="formTitle">
+    <h2 id="formTitle">質問を送る</h2>
+    <p class="note">お名前は不要です。回答は、このQ&amp;A集に匿名で掲載します。個人が特定される内容は書かないでください。</p>
+    <label for="fSubject">科目</label>
+    <select id="fSubject"></select>
+    <label for="fQuestion">質問の内容</label>
+    <textarea id="fQuestion" maxlength="1000" placeholder="例：テキスト○ページの△△について、□□との違いが分かりません。"></textarea>
+    <p class="note"><span id="fLen">0</span> / 1000文字</p>
+    <label for="fFile">画像（任意・3枚まで）</label>
+    <div class="attach">
+      <button class="attach-btn" id="fileBtn" type="button">画像を選ぶ</button>
+      <input id="fFile" type="file" accept="image/jpeg,image/png" multiple hidden>
+      <span class="note" style="margin:0">テキストや問題の写真を添付できます。パソコンでは貼り付け（Ctrl+V）もできます。</span>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+    <p class="note">画像もQ&amp;A集に掲載することがあります。お名前や顔など、個人が分かるものが写らないようにしてください。</p>
+    <div class="form-actions">
+      <button class="send" id="sendBtn" type="button">送信する</button>
+      <button class="cancel" id="cancelBtn" type="button">閉じる</button>
+      <span class="msg" id="formMsg" role="status"></span>
+    </div>
+  </section>
+
+  <div class="tools">
+    <input id="search" type="search" placeholder="キーワードで探す" aria-label="キーワードで探す">
+    <select id="filter" aria-label="科目で絞り込む"></select>
+  </div>
+  <p class="count" id="count"></p>
+  <div id="list"><p class="empty">読み込んでいます…</p></div>
+</div>
+<div class="viewer" id="viewer" role="dialog" aria-label="画像の拡大表示"><img id="viewerImg" alt="拡大した画像"></div>
+
+<script>
+(function () {
+  // 講座ごとの科目一覧。講座を増やすときは、ここに追加します。
+  var SUBJECTS = {
+    '社会福祉士': ['医学概論', '心理学と心理的支援', '社会学と社会システム', '社会福祉の原理と政策', '社会保障',
+      '権利擁護を支える法制度', '地域福祉と包括的支援体制', '障害者福祉', '刑事司法と福祉',
+      'ソーシャルワークの基盤と専門職', 'ソーシャルワークの理論と方法', '社会福祉調査の基礎',
+      '高齢者福祉', '児童・家庭福祉', '貧困に対する支援', '保健医療と福祉',
+      'ソーシャルワークの基盤と専門職（専門）', 'ソーシャルワークの理論と方法（専門）', '福祉サービスの組織と経営',
+      '学習方法・試験全般', 'その他']
+  };
+  var course = '社会福祉士';
+  var items = [];
+  // 質問台帳につながる窓口（Apps Script のウェブアプリURL）。空にすると見本表示になります。
+  var API_URL = 'https://script.google.com/macros/s/AKfycbwgco97-lQGaRw0IIYI0F3aL6FaB1BSsDtbyAj4aGLykHOfGpF3jKaLdwYhOCsssl5TTw/exec';
+  var hasServer = !!API_URL;
+  // 読み込みは、うまくいかなければ自動で3回までやり直す
+  function getJson(query, tries) {
+    return fetch(API_URL + query, { credentials: 'omit', redirect: 'follow' }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status); return r.json();
+    }).catch(function (e) {
+      if (tries > 1) return new Promise(function (ok) { setTimeout(ok, 800); }).then(function () { return getJson(query, tries - 1); });
+      throw e;
+    });
+  }
+  var $ = function (id) { return document.getElementById(id); };
+
+  function fillSubjects() {
+    var subs = SUBJECTS[course] || ['その他'];
+    $('fSubject').innerHTML = '';
+    $('filter').innerHTML = '';
+    addOption($('filter'), '', 'すべての科目');
+    subs.forEach(function (s) { addOption($('fSubject'), s, s); addOption($('filter'), s, s); });
+    $('courseName').textContent = course;
+    document.title = course + '講座 Q&A集';
+  }
+  function addOption(sel, value, text) {
+    var o = document.createElement('option'); o.value = value; o.textContent = text; sel.appendChild(o);
+  }
+
+  function render() {
+    var kw = $('search').value.trim().toLowerCase();
+    var sub = $('filter').value;
+    var now = Date.now();
+    var shown = items.filter(function (it) {
+      if (sub && it.subject !== sub) return false;
+      if (kw && (it.question + ' ' + it.answer + ' ' + it.subject).toLowerCase().indexOf(kw) < 0) return false;
+      return true;
+    });
+    var list = $('list');
+    list.innerHTML = '';
+    $('count').textContent = shown.length + '件を表示しています';
+    if (!shown.length) {
+      var p = document.createElement('p'); p.className = 'empty';
+      p.textContent = items.length ? '条件に合うQ&Aがありません。' : 'まだ掲載中のQ&Aはありません。最初の質問をお待ちしています。';
+      list.appendChild(p); return;
+    }
+    shown.forEach(function (it) {
+      var art = document.createElement('article'); art.className = 'qa';
+      var head = document.createElement('div'); head.className = 'qa-head';
+      if (it.time && now - it.time < 30 * 86400000) head.appendChild(el('span', 'new', 'NEW'));
+      if (it.subject) head.appendChild(el('span', 'tag', it.subject));
+      if (it.date) head.appendChild(el('span', '', it.date));
+      art.appendChild(head);
+      art.appendChild(row('q', 'Q', it.question, it.qImages, '質問の画像'));
+      art.appendChild(row('a', 'A', it.answer, it.aImages, '回答の画像'));
+      list.appendChild(art);
+    });
+  }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; e.textContent = text; return e; }
+  function row(cls, mark, text, images, alt) {
+    var d = document.createElement('div'); d.className = cls;
+    var body = el('div', '', text);
+    if (images && images.length) {
+      var pics = el('div', 'pics', '');
+      images.forEach(function (id, i) { pics.appendChild(picture(id, alt + (i + 1))); });
+      body.appendChild(pics);
+    }
+    d.appendChild(el('span', 'mark', mark)); d.appendChild(body); return d;
+  }
+  // 画像は1枚ずつ後から読み込む（一度読んだものは覚えておく）
+  var imageCache = {};
+  function picture(id, alt) {
+    var box = el('span', 'loading', '画像を読み込み中');
+    var show = function (src) {
+      var img = document.createElement('img'); img.src = src; img.alt = alt;
+      img.addEventListener('click', function () { $('viewerImg').src = src; $('viewer').classList.add('open'); });
+      if (box.parentNode) box.parentNode.replaceChild(img, box); else box = img;
+    };
+    if (imageCache[id]) { var im = document.createElement('img'); im.src = imageCache[id]; im.alt = alt;
+      im.addEventListener('click', function () { $('viewerImg').src = imageCache[id]; $('viewer').classList.add('open'); }); return im; }
+    if (/^data:/.test(id)) { imageCache[id] = id; return picture(id, alt); }
+    if (hasServer) {
+      getJson('?action=image&id=' + encodeURIComponent(id), 3).then(function (d) {
+        if (!d.ok) throw new Error(d.error); imageCache[id] = d.src; show(d.src);
+      }).catch(function () { box.textContent = '画像を表示できません'; });
+    } else { box.textContent = '（見本では画像なし）'; }
+    return box;
+  }
+  function setData(data) {
+    items = data.items || [];
+    var now = Date.now();
+    $('statReceived').textContent = data.received + '件';
+    $('statPublished').textContent = items.length + '件';
+    $('statNew').textContent = items.filter(function (it) { return it.time && now - it.time < 30 * 86400000; }).length + '件';
+    render();
+  }
+  function load() {
+    if (!hasServer) { $('demo').hidden = false; setData(sample()); return; }
+    getJson('?action=list&course=' + encodeURIComponent(course), 3).then(setData).catch(function () {
+      $('list').innerHTML = ''; $('list').appendChild(el('p', 'empty', '読み込みに失敗しました。時間をおいて、もう一度開いてください。'));
+    });
+  }
+  function sampleImage(label) {
+    var c = document.createElement('canvas'); c.width = 520; c.height = 300; var x = c.getContext('2d');
+    x.fillStyle = '#eef3f9'; x.fillRect(0, 0, 520, 300); x.strokeStyle = '#9fb3cc'; x.lineWidth = 3; x.strokeRect(12, 12, 496, 276);
+    x.fillStyle = '#41566f'; x.font = 'bold 24px sans-serif'; x.textAlign = 'center'; x.fillText(label, 260, 158);
+    return c.toDataURL('image/png');
+  }
+  function sample() {
+    var day = 86400000, now = Date.now();
+    var fmt = function (t) { var d = new Date(t); return d.getFullYear() + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + ('0' + d.getDate()).slice(-2); };
+    return { received: 3, items: [
+      { time: now - 2 * day, date: fmt(now - 2 * day), subject: '社会保障',
+        question: '【サンプル】国民年金の第1号・第2号・第3号被保険者の違いが、なかなか覚えられません。',
+        answer: '【サンプル】働き方で分けて覚えます。\n・第1号：自営業者や学生など（20歳以上60歳未満）\n・第2号：会社員や公務員など、厚生年金に加入している人\n・第3号：第2号被保険者に扶養されている配偶者（20歳以上60歳未満）',
+        qImages: [sampleImage('質問に添付された画像の例')], aImages: [] },
+      { time: now - 45 * day, date: fmt(now - 45 * day), subject: '権利擁護を支える法制度',
+        question: '【サンプル】成年後見制度の「後見」「保佐」「補助」は、何が違うのですか。',
+        answer: '【サンプル】本人の判断能力の程度で分かれます。\n・後見：判断能力を欠く常況にある人\n・保佐：判断能力が著しく不十分な人\n・補助：判断能力が不十分な人' }
+    ] };
+  }
+
+  // ---- 画像の添付 ----
+  var MAX_IMAGES = 3, MAX_SIDE = 1600;
+  var attached = [];   // {name, type, data(base64), url(プレビュー用)}
+  function addFiles(files) {
+    var msg = $('formMsg'); msg.className = 'msg'; msg.textContent = '';
+    Array.prototype.slice.call(files).forEach(function (f) {
+      if (!/^image\//.test(f.type)) return;
+      if (attached.length >= MAX_IMAGES) { msg.className = 'msg ng'; msg.textContent = '画像は' + MAX_IMAGES + '枚までです。'; return; }
+      var slot = { name: f.name || 'image', type: 'image/jpeg', data: '', url: '' };
+      attached.push(slot);
+      shrink(f, function (dataUrl) {
+        if (!dataUrl) { attached.splice(attached.indexOf(slot), 1); msg.className = 'msg ng'; msg.textContent = 'この画像は読み込めませんでした。'; drawThumbs(); return; }
+        slot.url = dataUrl; slot.data = dataUrl.split(',')[1]; drawThumbs();
+      });
+    });
+    drawThumbs();
+  }
+  // 大きい写真は長辺1600pxに縮めてJPEGにする（送信を軽くするため）
+  function shrink(file, cb) {
+    var reader = new FileReader();
+    reader.onerror = function () { cb(null); };
+    reader.onload = function () {
+      var img = new Image();
+      img.onerror = function () { cb(null); };
+      img.onload = function () {
+        var k = Math.min(1, MAX_SIDE / Math.max(img.width, img.height));
+        var c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        var ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height);
+        cb(c.toDataURL('image/jpeg', 0.82));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+  function drawThumbs() {
+    var box = $('thumbs'); box.innerHTML = '';
+    attached.forEach(function (a, i) {
+      if (!a.url) return;
+      var t = el('div', 'thumb', ''); var img = document.createElement('img'); img.src = a.url; img.alt = '添付画像' + (i + 1);
+      var x = el('button', '', '×'); x.type = 'button'; x.setAttribute('aria-label', '添付画像' + (i + 1) + 'を外す');
+      x.addEventListener('click', function () { attached.splice(attached.indexOf(a), 1); drawThumbs(); });
+      t.appendChild(img); t.appendChild(x); box.appendChild(t);
+    });
+  }
+  $('fileBtn').addEventListener('click', function () { $('fFile').click(); });
+  $('fFile').addEventListener('change', function () { addFiles(this.files); this.value = ''; });
+  $('fQuestion').addEventListener('paste', function (e) {
+    var files = (e.clipboardData && e.clipboardData.files) || [];
+    if (files.length) { e.preventDefault(); addFiles(files); }
+  });
+  $('viewer').addEventListener('click', function () { this.classList.remove('open'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') $('viewer').classList.remove('open'); });
+
+  $('askBtn').addEventListener('click', function () { $('form').classList.add('open'); $('fQuestion').focus(); });
+  $('cancelBtn').addEventListener('click', function () { $('form').classList.remove('open'); });
+  $('fQuestion').addEventListener('input', function () { $('fLen').textContent = this.value.length; });
+  $('search').addEventListener('input', render);
+  $('filter').addEventListener('change', render);
+  $('sendBtn').addEventListener('click', function () {
+    var q = $('fQuestion').value.trim(), msg = $('formMsg'), btn = this;
+    msg.className = 'msg';
+    if (!q) { msg.className = 'msg ng'; msg.textContent = '質問の内容を入力してください。'; return; }
+    var done = function () {
+      msg.className = 'msg ok'; msg.textContent = '質問を受け付けました。回答はこのQ&A集に掲載します。';
+      $('fQuestion').value = ''; $('fLen').textContent = '0'; btn.disabled = false; attached = []; drawThumbs();
+    };
+    if (attached.some(function (a) { return !a.data; })) { msg.className = 'msg ng'; msg.textContent = '画像を準備しています。少し待ってから、もう一度押してください。'; return; }
+    btn.disabled = true; msg.textContent = '送信しています…';
+    if (!hasServer) { setTimeout(done, 400); return; }
+    fetch(API_URL, { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ course: course, subject: $('fSubject').value, question: q,
+        images: attached.map(function (a) { return { name: a.name, type: a.type, data: a.data }; }) })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (!d.ok) throw new Error(d.error || ''); done();
+    }).catch(function (e) {
+      msg.className = 'msg ng'; msg.textContent = (e && e.message && !/fetch/i.test(e.message) ? e.message : '送信できませんでした。もう一度お試しください。'); btn.disabled = false;
+    });
+  });
+
+  // URLの ?course=○○ で講座を切り替える（指定がなければ社会福祉士）
+  function start(c) { if (c && SUBJECTS[c]) course = c; fillSubjects(); load(); }
+  start(new URLSearchParams(location.search).get('course'));
+})();
+</script>
+</body>
+</html>
