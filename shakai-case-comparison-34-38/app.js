@@ -43,7 +43,7 @@ const requestedView = new URLSearchParams(location.search).get('view');
 const viewKeys = ['overview', 'type', 'breakdown', 'age', 'event', 'subject'];
 const initial = () => ({
   domain: 'all', type: 'all', view: 'overview', open: null, drill: null, query: '', page: 0,
-  units: Object.fromEntries(viewKeys.map(view => [view, 'count']))
+  units: Object.fromEntries(viewKeys.map(view => [view, view === 'overview' ? 'rate' : 'count']))
 });
 let state = initial();
 // 描画中の切り口。グラフは全切り口を順に描き、問題一覧は最後に選ばれた切り口（state.view）で描く。
@@ -80,6 +80,7 @@ function start() {
   $('#domain').innerHTML = '<option value="all">すべての分野</option>' + options(domains);
   $('#type').innerHTML = '<option value="all">すべての型</option>' + options(types);
   renderStats();
+  renderEventHighlight();
   render();
   if (extraKeys.includes(requestedView)) openExtra(requestedView);
   else if (viewKeys.includes(requestedView)) document.getElementById(`view-${requestedView}`).scrollIntoView({block: 'start'});
@@ -127,15 +128,63 @@ function renderStats() {
     <span class="rise-arrow" aria-hidden="true"></span>
     ${rateCard(after)}`;
 
-  const examCases = questions.filter(q => q.round === 38);
-  $('#exam-total').textContent = `全${examCases.length}問`;
-  $('#exam-types').innerHTML = Object.entries(types).map(([type, label]) => {
-    const count = examCases.filter(q => q.type === type).length;
+  // 事例の分類：出題傾向と同じく、新科目（直近2回）の平均で示す。
+  const recent = exams.filter(exam => exam.era === 'new');
+  const recentCases = questions.filter(q => recent.some(exam => exam.round === q.round));
+  const rounds = recent.map(exam => exam.round).join('・');
+  $('#exam-total').textContent = `直近${recent.length}回（第${rounds}回）の平均`;
+  $('#exam-types').innerHTML = Object.keys(types).map(type => {
+    const count = recentCases.filter(q => q.type === type).length;
     return `<div class="exam-type ${type}">
-      <dt>${label}</dt>
-      <dd>${count}<small>問</small></dd>
+      <dt>${type === 'knowledge' ? '知識系' : '対応系'}の事例問題</dt>
+      <dd>${percent(count, recentCases.length).toFixed(1)}<small>%</small></dd>
+      <dd class="exam-type-detail">事例 平均${countFormat.format(recentCases.length / recent.length)}問中 <strong>平均${countFormat.format(count / recent.length)}問</strong></dd>
     </div>`;
   }).join('');
+}
+
+// 出題頻度の高い6つのライフイベントと、社会保険が主に関わる「4大イベント」
+const frequentEvents = ['job', 'inc', 'med', 'care', 'justice', 'right'];
+const bigFourEvents = ['job', 'inc', 'med', 'care'];
+function renderEventHighlight() {
+  const security = questions.filter(q => q.domain === 'security');
+  const total = security.length;
+  const countOf = key => security.filter(q => q.event === key).length;
+  const share = count => percent(count, total).toFixed(1);
+  const frequentCount = sum(frequentEvents.map(countOf));
+  const bigFourCount = sum(bigFourEvents.map(countOf));
+  const high = Math.max(...frequentEvents.map(countOf));
+  const names = keys => keys.map(key => eventFor.get(key)).join('／');
+  $('#event-total').textContent = `社会保障理解の事例 全${total}問`;
+  $('#event-highlight').innerHTML = `
+    <div class="highlight-lead">
+      <p class="highlight-kicker">第34〜38回（5回分）の出題頻度</p>
+      <h3>出題の<strong>約${Math.round(percent(frequentCount, total) / 10)}割</strong>は、<strong>6つのライフイベント</strong>から！</h3>
+      <p class="highlight-figure"><b>${total}問</b>のうち <b>${frequentCount}問</b><span>（${share(frequentCount)}%）</span></p>
+    </div>
+    <ul class="highlight-cards">${frequentEvents.map(key => {
+      const count = countOf(key);
+      const big = bigFourEvents.includes(key);
+      return `<li><button type="button" class="highlight-card${big ? ' big-four' : ''}" data-event-study="${key}" aria-haspopup="dialog" aria-controls="event-study" aria-label="${eventFor.get(key)} ${count}問 ${share(count)}% 制度と解答のポイントを見る">
+        ${big ? '<span class="big-four-badge">4大イベント</span>' : ''}
+        <img src="./assets/life/${eventIllustrations[key].file}.webp" width="64" height="64" alt="" decoding="async">
+        <span class="highlight-name">${eventFor.get(key)}</span>
+        <span class="highlight-count"><b>${count}</b>問 <small>${share(count)}%</small></span>
+        <span class="highlight-track" aria-hidden="true"><i style="width:${percent(count, high)}%"></i></span>
+      </button></li>`;
+    }).join('')}</ul>
+    <div class="big-four-box">
+      <div class="big-four-head">
+        <p class="big-four-title"><span>社会保険が主に関わる</span><strong>4大イベント</strong></p>
+        <p class="big-four-names">${names(bigFourEvents)}</p>
+        <p class="big-four-figure"><b>${bigFourCount}問</b><span>（${share(bigFourCount)}%）</span></p>
+      </div>
+      <div class="big-four-text">
+        <p>この4つは、<strong>ほかの制度と関連づけながら</strong>制度が組み立てられているため、<strong>受験生が最も苦手としやすい</strong>ライフイベントです。</p>
+        <p class="big-four-point">4大イベントを<strong>体系的に学ぶ</strong>ことが、事例問題攻略のカギ！</p>
+      </div>
+    </div>
+    <p class="highlight-note">割合は「社会保障理解」に分類した事例${total}問に占める割合です。イラストを選ぶと、解答に必要な制度・法律を確認できます。</p>`;
 }
 
 function filtered() {
@@ -183,11 +232,11 @@ function chartButton(label, round, key, count, className, style, content) {
 
 function renderChart(section) {
   const labels = {
-    overview: ['回次別の事例問題', '割合の分母は各回の全問題数。棒を選ぶと問題一覧に移動します。'],
-    type: ['知識系と対応系の比較', '割合の分母は各回の全事例数。棒を選ぶと問題一覧に移動します。'],
+    overview: ['回次別の事例問題の推移', '割合の分母は各回の全問題数。棒を選ぶと問題一覧に移動します。'],
+    type: ['知識系と対応系の推移（第34〜38回）', '割合の分母は各回の全事例数。棒を選ぶと問題一覧に移動します。'],
     breakdown: ['事例問題の分類と内訳', '表の数値を選ぶと問題一覧に移動します。知識系内比は、知識系の2項目の割合です。'],
     age: ['利用者の年齢別にみた出題', '第34〜38回の5回分を集計。数値や棒を選ぶと、根拠となる問題を確認できます。'],
-    event: ['ライフイベント別の出題', '項目名やイラストを選ぶと、解答に必要な制度・法律を確認できます。各回の数字を選ぶと該当する問題の一覧が開きます。割合の分母は各回の「社会保障理解」の事例数です。'],
+    event: ['ライフイベント別の出題数（第34〜38回）', '項目名やイラストを選ぶと、解答に必要な制度・法律を確認できます。各回の数字を選ぶと該当する問題の一覧が開きます。割合の分母は各回の「社会保障理解」の事例数です。'],
     subject: ['科目系統別の出題', '類似する旧・新科目を同じ系統にまとめました。割合の分母は各回の全事例数です。']
   };
   const [title, note] = labels[activeView];
@@ -663,7 +712,7 @@ $('#event-study-body').addEventListener('click', event => {
   }
 });
 
-$('#case-analysis').addEventListener('click', event => {
+$('#compare').addEventListener('click', event => {
   const openButton = event.target.closest('button[data-open]');
   if (openButton) {
     openExtra(openButton.dataset.open);
