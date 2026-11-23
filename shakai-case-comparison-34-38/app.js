@@ -490,6 +490,8 @@ function openPractice(index) {
   panel.hidden = false;
   panel.innerHTML = `
     <div class="practice-nav"><button type="button" class="practice-back" data-return>‹ 問題一覧に戻る</button>
+      <span class="qsize" role="group" aria-label="文字サイズ"><span class="qsize-label">文字サイズ</span>
+        ${[['normal', '標準'], ['large', '大'], ['xlarge', '特大']].map(([k, t]) => `<button type="button" data-qsize="${k}" aria-pressed="${k === questionSize}">${t}</button>`).join('')}</span>
       <span>${index + 1} / ${listedQuestions.length} 問</span></div>
     <div class="practice-body">
       <header class="practice-heading">
@@ -535,7 +537,19 @@ $('#question-list').addEventListener('click', event => {
   const button = event.target.closest('[data-practice]');
   if (button) openPractice(listedQuestions.findIndex(q => `${q.round}-${q.number}` === button.dataset.practice));
 });
+let questionSize = 'large';
+try { questionSize = localStorage.getItem('shakaiCaseQuestionSize') || 'large'; } catch (error) { /* 保存できない環境では既定値 */ }
+if (!['normal', 'large', 'xlarge'].includes(questionSize)) questionSize = 'large';
+$('#practice').dataset.qsize = questionSize;
+function setQuestionSize(size) {
+  questionSize = size;
+  $('#practice').dataset.qsize = size;
+  document.querySelectorAll('#practice [data-qsize]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.qsize === size)));
+  try { localStorage.setItem('shakaiCaseQuestionSize', size); } catch (error) { /* 保存できなくても表示は切り替える */ }
+}
 $('#practice').addEventListener('click', event => {
+  const sizeButton = event.target.closest('button[data-qsize]');
+  if (sizeButton) { setQuestionSize(sizeButton.dataset.qsize); return; }
   if (event.target.closest('[data-return]')) returnToQuestions();
   else if (event.target.closest('[data-next]')) openPractice(practiceIndex + 1);
   else if (event.target.closest('[data-retry]')) openPractice(practiceIndex);

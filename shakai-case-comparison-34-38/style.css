@@ -676,3 +676,34 @@ body:has(.event-study[open]) { overflow: hidden; }
 @media (max-width: 650px) { .event-highlight { padding: 16px 12px 14px; } .big-four-box { grid-template-columns: 1fr; padding: 14px; } .highlight-cards { gap: 8px; row-gap: 18px; } .highlight-card img { width: 52px; height: 52px; } }
 .exam-type dd.exam-type-detail { margin-top: 4px; font-size: .9rem; font-weight: 500; line-height: 1.4; color: var(--ink); }
 .exam-type dd.exam-type-detail strong { font-weight: 800; }
+
+/* 問題を解く画面の文字サイズ（標準・大・特大） */
+.practice { --q-scale: 1.25; }
+.practice[data-qsize="normal"] { --q-scale: 1; }
+.practice[data-qsize="xlarge"] { --q-scale: 1.5; }
+.practice-body { font-size: calc(1rem * var(--q-scale)); max-width: calc(920px * (0.6 + 0.4 * var(--q-scale))); }
+.practice-body .practice-heading h3 { font-size: clamp(1.45em, 3vw, 1.95em); }
+.practice-body .practice-heading p,
+.practice-body .practice-note,
+.practice-body .reading-choice, .practice-body .reading-mark { font-size: .875em; }
+.practice-body .domain-tag, .practice-body .type-tag { font-size: .8125em; }
+.practice-body .practice-case h4,
+.practice-body .practice-choices legend,
+.practice-body .reading-guide p { font-size: .9em; }
+.practice-body .practice-prompt { font-size: 1.07em; }
+.practice-body .choice-mark { font-size: .8em; }
+.practice-body #choice-count { font-size: .85em; }
+.practice-body .feedback h4 { font-size: 1.18em; }
+.practice-body .practice-choice { line-height: 1.7; padding: .7em .8em; }
+.practice-body .practice-choice input { width: 1.15em; height: 1.15em; }
+.practice-body .practice-choice input:checked::after { width: .28em; height: .55em; }
+.practice-body button { font-size: 1em; }
+.practice-nav { flex-wrap: wrap; }
+.qsize { display: inline-flex; align-items: center; gap: 6px; margin-inline-start: auto; }
+.qsize-label { font-weight: 750; }
+.qsize button {
+  border: 1px solid #b9cbc7; border-radius: 6px; background: white; color: #09665d;
+  padding: 4px 11px; font-weight: 750; line-height: 1.4;
+}
+.qsize button[aria-pressed="true"] { background: #08675e; border-color: #08675e; color: white; }
+@media (max-width: 640px) { .qsize { margin-inline-start: 0; width: 100%; } }

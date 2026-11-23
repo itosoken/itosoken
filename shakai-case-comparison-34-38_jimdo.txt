@@ -1,0 +1,1 @@
+<iframe src="https://itosoken.github.io/itosoken/shakai-case-comparison-34-38/" title="社会福祉士 事例問題の分析（第34〜38回）" style="display:block;width:100%;height:90vh;min-height:640px;max-height:1000px;border:1px solid #dbe5df;border-radius:12px;background:#f4f7f3;" loading="lazy"></iframe>
