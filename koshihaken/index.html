@@ -588,12 +588,12 @@
 
 <section class="contact">
   <div class="wrap">
-<div class="talk"><span class="face" role="img" aria-label="講師のイラスト"></span><p class="bubble">内容が決まっていなくても大丈夫。<br><em>まずはメールでお気軽にどうぞ！</em></p></div>
+<div class="talk"><span class="face" role="img" aria-label="講師のイラスト"></span><p class="bubble">内容が決まっていなくても大丈夫。<br><em>お問い合わせフォームからお気軽にどうぞ！</em></p></div>
     <h2>まずはお気軽にご相談ください</h2>
     <p>内容が決まっていない段階でのご相談も歓迎します。</p>
-    <a class="btn" href="mailto:info@itosoken.com?subject=%E8%AC%9B%E5%B8%AB%E6%B4%BE%E9%81%A3%E3%81%AE%E4%BB%B6" target="_top">メールで問い合わせる</a>
-    <p><strong>info@itosoken.com</strong></p>
-    <p class="small">お問い合わせはメールでお願いします。件名に「講師派遣の件」と書き添えていただくと、ご案内がスムーズです。</p>
+    <a class="btn" id="contactBtn" href="https://www.itosoken.com/contactus/" target="_top">お問い合わせフォームへ</a>
+    <p class="small">このページのすぐ下にあるフォームからお問い合わせください。メッセージ欄に「講師派遣の件」と書き添えていただくと、ご案内がスムーズです。</p>
+    <p class="small">メールでも受け付けています：<a href="mailto:info@itosoken.com?subject=%E8%AC%9B%E5%B8%AB%E6%B4%BE%E9%81%A3%E3%81%AE%E4%BB%B6" target="_top" style="color:#fff;font-weight:700;">info@itosoken.com</a></p>
     <div class="org">
       いとう総研資格取得支援センター（有限会社いとう総研）<br>
       〒811-3405 福岡県宗像市須恵1-9-3　<a href="https://www.itosoken.com" target="_top">www.itosoken.com</a>
@@ -614,6 +614,12 @@
   window.addEventListener("resize", send);
   if (window.ResizeObserver) new ResizeObserver(send).observe(document.body);
   setTimeout(send, 500); setTimeout(send, 2000);
+  /* 埋め込み時：ボタンで親ページ（Jimdo）のフォームまで移動する */
+  var btn = document.getElementById("contactBtn");
+  if (btn) btn.addEventListener("click", function(ev){
+    ev.preventDefault();
+    window.parent.postMessage({type:"koshihaken-contact"}, "*");
+  });
 })();
 </script>
 </body>

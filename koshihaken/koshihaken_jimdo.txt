@@ -2,8 +2,14 @@
 <script>
 window.addEventListener("message", function(e){
   if (e.origin !== "https://itosoken.github.io") return;
-  if (e.data && e.data.type === "koshihaken-height") {
-    document.getElementById("koshihaken").style.height = e.data.height + "px";
+  var f = document.getElementById("koshihaken");
+  if (!e.data || !f) return;
+  if (e.data.type === "koshihaken-height") {
+    f.style.height = e.data.height + "px";
+  }
+  if (e.data.type === "koshihaken-contact") {
+    var y = f.getBoundingClientRect().bottom + window.pageYOffset - 90;
+    window.scrollTo({ top: y, behavior: "smooth" });
   }
 });
 </script>
