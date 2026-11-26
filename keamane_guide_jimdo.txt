@@ -1,0 +1,1 @@
+<iframe src="https://itosoken.github.io/itosoken/keamane_guide.html" title="ケアマネジャー講座 eラーニング利用ガイド" style="display:block;width:100%;height:90vh;min-height:640px;max-height:1000px;border:1px solid #d9e0e7;border-radius:12px;background:#f4f6f8;" loading="lazy"></iframe>
