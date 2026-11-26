@@ -1,4 +1,4 @@
-<iframe id="keamane-guide" src="https://itosoken.github.io/itosoken/keamane_guide.html" style="width:100%;border:0;display:block;" height="6000" scrolling="no" title="ケアマネジャー講座 eラーニング利用ガイド"></iframe>
+<iframe id="keamane-guide" src="https://itosoken.github.io/itosoken/keamane_guide.html" style="width:100%;border:0;display:block;" height="6000" title="ケアマネジャー講座 eラーニング利用ガイド"></iframe>
 <script>
 window.addEventListener("message", function(e){
   if (e.origin !== "https://itosoken.github.io") return;
