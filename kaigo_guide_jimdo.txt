@@ -1,0 +1,15 @@
+<iframe id="kaigo-guide" src="https://itosoken.github.io/itosoken/kaigo_guide.html" style="width:100%;border:0;display:block;" height="6000" title="介護福祉士講座 eラーニング利用ガイド"></iframe>
+<script>
+window.addEventListener("message", function(e){
+  if (e.origin !== "https://itosoken.github.io") return;
+  var f = document.getElementById("kaigo-guide");
+  if (!e.data || !f) return;
+  if (e.data.type === "kaigo-guide-height") {
+    f.style.height = e.data.height + "px";
+  }
+  if (e.data.type === "kaigo-guide-scroll") {
+    var y = f.getBoundingClientRect().top + window.pageYOffset + e.data.top - 100;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }
+});
+</script>
