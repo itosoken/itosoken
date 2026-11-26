@@ -1,1 +1,15 @@
-<iframe src="https://itosoken.github.io/itosoken/keamane_guide.html" title="ケアマネジャー講座 eラーニング利用ガイド" style="display:block;width:100%;height:90vh;min-height:640px;max-height:1000px;border:1px solid #d9e0e7;border-radius:12px;background:#f4f6f8;" loading="lazy"></iframe>
+<iframe id="keamane-guide" src="https://itosoken.github.io/itosoken/keamane_guide.html" style="width:100%;border:0;display:block;" height="6000" scrolling="no" title="ケアマネジャー講座 eラーニング利用ガイド"></iframe>
+<script>
+window.addEventListener("message", function(e){
+  if (e.origin !== "https://itosoken.github.io") return;
+  var f = document.getElementById("keamane-guide");
+  if (!e.data || !f) return;
+  if (e.data.type === "keamane-guide-height") {
+    f.style.height = e.data.height + "px";
+  }
+  if (e.data.type === "keamane-guide-scroll") {
+    var y = f.getBoundingClientRect().top + window.pageYOffset + e.data.top - 100;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }
+});
+</script>

@@ -522,5 +522,29 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:v
 </footer>
 
 </div>
+<script>
+/* ホームページ（Jimdo）に埋め込んだとき：ページ全体の高さを親ページへ伝え、枠の中のスクロールをなくす */
+(function(){
+  if (window.parent === window) return;
+  var last = 0;
+  function send(){
+    var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if (h !== last){ last = h; window.parent.postMessage({type:"keamane-guide-height", height:h}, "*"); }
+  }
+  window.addEventListener("load", send);
+  window.addEventListener("resize", send);
+  if (window.ResizeObserver) new ResizeObserver(send).observe(document.body);
+  setTimeout(send, 500); setTimeout(send, 2000); setTimeout(send, 5000);
+  /* 目次などページ内リンク：移動先の位置を親ページへ伝える */
+  document.addEventListener("click", function(ev){
+    var a = ev.target.closest && ev.target.closest('a[href^="#"]');
+    if (!a) return;
+    var t = document.getElementById(a.getAttribute("href").slice(1));
+    if (!t) return;
+    var y = Math.round(t.getBoundingClientRect().top + (window.pageYOffset || 0));
+    window.parent.postMessage({type:"keamane-guide-scroll", top:y}, "*");
+  });
+})();
+</script>
 </body>
 </html>
